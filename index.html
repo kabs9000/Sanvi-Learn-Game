@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sanvi's Learning Game 🌟</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f0f0;
+            text-align: center;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            margin: auto;
+            width: 50%;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #FF4500; /* Orangered color for header */
+            font-size: 2.5em;
+        }
+        button, .skip-btn {
+            background-color: #4CAF50; /* Green color for buttons */
+            color: white;
+            border: none;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .next-btn {
+            background-color: #00BFFF; /* Deepskyblue color for next button */
+        }
+        .quiz-question {
+            font-size: 1.8em;
+            margin: 20px 0;
+            color: #4B0082; /* Indigo color for questions */
+        }
+        .answer-input {
+            font-size: 1.5em;
+            padding: 10px;
+            width: 100px;
+        }
+        .feedback {
+            font-size: 1.2em;
+            margin-top: 10px;
+        }
+        .progress-bar {
+            background-color: #e0e0df;
+            border-radius: 13px;
+            padding: 3px;
+        }
+        .progress-bar-inner {
+            height: 20px;
+            width: 0;
+            background-color: #76c7c0; /* Medium turquoise color for progress bar */
+            border-radius: 10px;
+        }
+        .emoji {
+            font-size: 2em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to Math Rockstars 🌟</h1>
+        <div id="startScreen">
+            <button id="startGame">Start Game 🚀</button>
+        </div>
+        <div id="gameScreen" style="display:none;">
+            <div class="progress-bar" id="progressBar">
+                <div class="progress-bar-inner"></div>
+            </div>
+            <div class="quiz-question" id="question">What is 2 + 2? 🤔</div>
+            <input type="text" id="answer" class="answer-input">
+            <button class="next-btn" id="submitAnswer">Submit 🌈</button>
+            <button class="skip-btn" id="skipQuestion">Skip  </button>
+            <div class="feedback" id="feedback"></div>
+        </div>
+        <div id="endScreen" style="display:none;">
+            <h2>Your Score: <span id="score"></span> 🎉</h2>
+            <button id="playAgain">Play Again 🔄</button>
+        </div>
+    </div>
+    
+    <script>
+        var questions = [
+            { question: "What is 492-293? 🤔", answer: "4" },
+            { question: "What is 3 * 3? 🧐", answer: "9" },
+            // Add more questions as needed
+        ];
+        var score = 0;
+        var currentQuestionIndex = 0;
+        
+        document.getElementById('startGame').addEventListener('click', function() {
+            document.getElementById('startScreen').style.display = 'none';
+            document.getElementById('gameScreen').style.display = 'block';
+            loadQuestion();
+        });
+        
+        document.getElementById('submitAnswer').addEventListener('click', function() {
+            var userAnswer = document.getElementById('answer').value;
+            var feedback = document.getElementById('feedback');
+            if(userAnswer == questions[currentQuestionIndex].answer) {
+                feedback.textContent = 'Correct! 😇 🎉';
+                feedback.style.color = 'green';
+                score++;
+                setTimeout(nextQuestion, 1000);
+            } else {
+                feedback.textContent = 'Whoops! 😵‍💫 Try again 😃';
+                feedback.style.color = 'red';
+            }
+        });
+        
+        document.getElementById('skipQuestion').addEventListener('click', function() {
+            nextQuestion();
+        });
+        
+        document.getElementById('playAgain').addEventListener('click', function() {
+            score = 0;
+            currentQuestionIndex = 0;
+            document.getElementById('endScreen').style.display = 'none';
+            document.getElementById('gameScreen').style.display = 'block';
+            loadQuestion();
+        });
+        
+        function loadQuestion() {
+            document.getElementById('question').innerHTML = questions[currentQuestionIndex].question;
+            document.getElementById('answer').value = '';
+            document.getElementById('feedback').textContent = '';
+            updateProgressBar();
+        }
+        
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if(currentQuestionIndex < questions.length) {
+                loadQuestion();
+            } else {
+                endGame();
+            }
+        }
+        
+        function endGame() {
+            document.getElementById('gameScreen').style.display = 'none';
+            document.getElementById('endScreen').style.display = 'block';
+            document.getElementById('score').textContent = score + '/' + questions.length;
+        }
+        
+        function updateProgressBar() {
+            var progressBarInner = document.querySelector('.progress-bar-inner');
+            var width = (currentQuestionIndex / questions.length) * 100;
+            progressBarInner.style.width = width + '%';
+        }
+    </script>
+</body>
+</html>
